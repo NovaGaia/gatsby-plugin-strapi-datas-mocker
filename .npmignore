@@ -1,0 +1,13 @@
+# Build output
+!gatsby-node.js
+!gatsby-ssr.js
+!index.js
+.npmrc
+.auto-changelog
+.babelrc
+.prettierignore
+.prettierrc.json
+.release-it.json
+package-lock.json
+thunder-tests
+src

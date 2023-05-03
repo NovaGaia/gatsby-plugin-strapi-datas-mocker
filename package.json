@@ -1,0 +1,48 @@
+{
+  "name": "gatsby-plugin-strapi-datas-mocker",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [
+    "strapi",
+    "mock",
+    "nova-datas-mocker",
+    "gatsby",
+    "gatsby-plugin"
+  ],
+  "main": "index.js",
+  "scripts": {
+    "build": "babel src --out-dir . --ignore \"**/__tests__\"",
+    "watch": "babel -w src --out-dir . --ignore \"**/__tests__\"",
+    "release": "release-it"
+  },
+  "author": "NovaGaïa",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NovaGaia/gatsby-plugin-strapi-datas-mocker.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NovaGaia/gatsby-plugin-strapi-datas-mocker/issues"
+  },
+  "homepage": "https://github.com/NovaGaia/gatsby-plugin-strapi-datas-mocker#readme",
+  "peerDependencies": {
+    "gatsby-plugin-schema-snapshot": "^3.24.0",
+    "gatsby": "^4.0.0-next || ^5.0.0-next",
+    "react": "^16.9.0 || ^17.0.0 || ^18.0.0 || ^0.0.0",
+    "react-dom": "^16.9.0 || ^17.0.0 || ^18.0.0 || ^0.0.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.15.4"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.21.8",
+    "babel-preset-gatsby-package": "^3.9.0",
+    "cross-env": "^7.0.3",
+    "release-it": "^15.10.3",
+    "gatsby-plugin-schema-snapshot": "^3.24.0"
+  },
+  "engines": {
+    "node": ">=14.15.0"
+  }
+}

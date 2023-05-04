@@ -2,7 +2,7 @@
 
 A gatsby plugin to interact with Strapi and the plugin [`nova-datas-mocker`](https://market.strapi.io/plugins/nova-datas-mocker).
 
-gatsby-plugin-strapi-datas-mocker`is a complementary plugin to the Strapi`nova-datas-mocker`.
+`gatsby-plugin-strapi-datas-mocker`is a complementary plugin to the Strapi`nova-datas-mocker`.
 
 [`nova-datas-mocker`](https://market.strapi.io/plugins/nova-datas-mocker) takes care of mocking, on demand via a simple switch, all specified Strapi APIs and `gatsby-plugin-strapi-datas-mocker` drives the [`gatsby-plugin-schema-snapshot`](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-schema-snapshot#readme) plugin to generate/update the Gatsby schema.
 

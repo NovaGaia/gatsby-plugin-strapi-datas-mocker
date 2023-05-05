@@ -81,6 +81,10 @@ exports.onPluginInit = async ({ reporter }, options) => {
       reporter.panicOnBuild(error)
       return null
     })
+  return onPluginInit(
+    { reporter },
+    { ...options.gatsbyPluginSchemaSnapshotOptions, update: false }
+  )
 }
 /** @type {import('gatsby').GatsbyNode["createSchemaCustomization"]} */
 exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
@@ -107,6 +111,10 @@ exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
       { ...options.gatsbyPluginSchemaSnapshotOptions, update: true }
     )
   }
+  return createSchemaCustomization(
+    { actions, reporter },
+    { ...options.gatsbyPluginSchemaSnapshotOptions, update: false }
+  )
 }
 
 /** @type {import('gatsby').GatsbyNode["createPages"]} */

@@ -3,12 +3,14 @@ const {
   createSchemaCustomization,
 } = require('gatsby-plugin-schema-snapshot/gatsby-node')
 
+let activity = null
+
 const verifyConfig = (options, reporter, warnOnForceUpdate = false) => {
   let canUpdate = true
   if (options.strapiURL === undefined) {
     canUpdate = false
     reporter.panicOnBuild(
-      `strapiURL undefined in Loaded strapi-mocker-activator!`
+      `strapiURL undefined in Loaded \`gatsby-plugin-strapi-datas-mocker\`!`
     )
   }
   if (
@@ -23,7 +25,7 @@ const verifyConfig = (options, reporter, warnOnForceUpdate = false) => {
   if (options.gatsbyPluginSchemaSnapshotOptions === undefined) {
     canUpdate = false
     reporter.panicOnBuild(
-      `gatsbyPluginSchemaSnapshotOptions undefined in Loaded strapi-mocker-activator!`
+      `gatsbyPluginSchemaSnapshotOptions undefined in Loaded \`gatsby-plugin-strapi-datas-mocker\`!`
     )
   }
   return canUpdate
@@ -39,7 +41,7 @@ exports.onPluginInit = async ({ reporter }, options) => {
       { reporter },
       { ...options.gatsbyPluginSchemaSnapshotOptions, update: false }
     )
-  reporter.info('Loaded strapi-mocker-activator')
+  reporter.info(`Loaded \`gatsby-plugin-strapi-datas-mocker\``)
 
   // Update on forcing update
   if (options.forceUpdate) {
@@ -50,6 +52,9 @@ exports.onPluginInit = async ({ reporter }, options) => {
   }
 
   // read strapi plugin config
+  activity = reporter.activityTimer(
+    `Schema (re)generation with Strapi plugin \`nova-datas-mocker\``
+  )
   const apiFetchURL = `${options.strapiURL}/nova-datas-mocker/isMockEnabled`
 
   fetch(apiFetchURL)
@@ -77,7 +82,7 @@ exports.onPluginInit = async ({ reporter }, options) => {
     })
 }
 /** @type {import('gatsby').GatsbyNode["createSchemaCustomization"]} */
-exports.createSchemaCustomization = ({ actions, reporter }, options) => {
+exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
   if (!verifyConfig(options, reporter, true)) return null
 
   // Do nothing on production (build process), use shema.gql
@@ -96,22 +101,34 @@ exports.createSchemaCustomization = ({ actions, reporter }, options) => {
   }
 
   // read strapi plugin config
+
+  activity.start()
+  activity.setStatus(`\`nova-datas-mocker\` is reading Strapi config`)
   const apiFetchURL = `${options.strapiURL}/nova-datas-mocker/isMockEnabled`
 
   fetch(apiFetchURL)
     .then(result => result.json())
     .then(data => {
+      activity.setStatus(
+        `\`nova-datas-mocker\` get confing from Strapi, \`mockEnabled\`=${data.mockEnabled}`
+      )
       return data.mockEnabled
     })
     .then(mockEnabled => {
-      // launch gatsby-plugin-schema-snapshot with update param
-      return createSchemaCustomization(
+      createSchemaCustomization(
         { actions, reporter },
         { ...options.gatsbyPluginSchemaSnapshotOptions, update: mockEnabled }
       )
     })
     .catch(error => {
+      activity.setStatus(`\`nova-datas-mocker\` has finished with error`)
       reporter.panicOnBuild(error)
       return null
     })
+}
+
+/** @type {import('gatsby').GatsbyNode["sourceNodes"]} */
+exports.sourceNodes = () => {
+  activity.setStatus(`\`nova-datas-mocker\` has finished.`)
+  activity.end()
 }

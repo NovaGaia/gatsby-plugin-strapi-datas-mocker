@@ -50,3 +50,7 @@ plugins: [
 | `strapiURL`                         | Strapi URL, with port, without trailling slach                                                                                                                  | `required`, no default value |
 | `forceUpdate`                       | Force the plugin to update Shcema, without using the switch on Strapi (not recommanded)                                                                         | `false`                      |
 | `gatsbyPluginSchemaSnapshotOptions` | The configuration of the plugin [`gatsby-plugin-schema-snapshot`](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-schema-snapshot#readme) | required, use `{}`           |
+
+## WARN
+
+`forceUpdate` in Gatsby will not activate mocking in Strapi!

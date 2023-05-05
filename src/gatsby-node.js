@@ -3,7 +3,6 @@ const {
   createSchemaCustomization,
 } = require('gatsby-plugin-schema-snapshot/gatsby-node')
 
-let activity = null
 let forceUpdateEnabled = false
 let strapiUpdateEnabled = false
 
@@ -22,7 +21,7 @@ const verifyConfig = (options, reporter, warnOnForceUpdate = false) => {
     forceUpdateEnabled = true
     if (warnOnForceUpdate)
       reporter.warn(
-        `UPDATE_SCHEMA_SNAPSHOT is forced to TRUE, never publish this config on serveur!`
+        `\`gatsby-plugin-strapi-datas-mocker\` is forced to TRUE, never publish this config on serveur!`
       )
   }
   if (options.gatsbyPluginSchemaSnapshotOptions === undefined) {
@@ -46,38 +45,29 @@ exports.onPluginInit = async ({ reporter }, options) => {
     )
   reporter.info(`Loaded \`gatsby-plugin-strapi-datas-mocker\``)
 
-  // read strapi plugin config
-  activity = reporter.activityTimer(
-    `Schema (re)generation \`gatsby-plugin-strapi-datas-mocker\``
-  )
-  activity.start()
   // Update on forcing update
   if (forceUpdateEnabled) {
-    activity.setStatus(
-      `\`nova-datas-mocker\` is forced localy. \`forceUpdate\`=true`
-    )
     return onPluginInit(
       { reporter },
       { ...options.gatsbyPluginSchemaSnapshotOptions, update: true }
     )
   }
-  activity.setStatus(`\`nova-datas-mocker\` is reading Strapi configuration`)
+
+  // read strapi plugin config
   const apiFetchURL = `${options.strapiURL}/nova-datas-mocker/isMockEnabled`
 
   fetch(apiFetchURL)
     .then(result => result.json())
     .then(data => {
-      activity.setStatus(
-        `\`nova-datas-mocker\` has read Strapi configuration, \`mockEnabled\`=${data.mockEnabled}`
-      )
       if (data.mockEnabled) {
         strapiUpdateEnabled = true
-        reporter.warn(`UPDATE_SCHEMA_SNAPSHOT is set to TRUE`)
+        reporter.warn(`Strapi \`nova-datas-mocker\` is set to TRUE in Strapi`)
         reporter.warn(
           `Don't forget to clean \`.cache\` and \`public\` folders before and after!`
         )
         return true
       }
+      reporter.info(`Strapi \`nova-datas-mocker\` is set to false in Strapi`)
       return false
     })
     .then(mockEnabled => {
@@ -105,9 +95,6 @@ exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
 
   // Update on forcing update
   if (forceUpdateEnabled) {
-    activity.setStatus(
-      `\`nova-datas-mocker\` is generating new schema forced with local configuration`
-    )
     return createSchemaCustomization(
       { actions, reporter },
       { ...options.gatsbyPluginSchemaSnapshotOptions, update: true }
@@ -115,9 +102,6 @@ exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
   }
 
   if (strapiUpdateEnabled) {
-    activity.setStatus(
-      `\`nova-datas-mocker\` is generating new schema forced with Strapi activation`
-    )
     return createSchemaCustomization(
       { actions, reporter },
       { ...options.gatsbyPluginSchemaSnapshotOptions, update: true }
@@ -125,14 +109,11 @@ exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
   }
 }
 
-/** @type {import('gatsby').GatsbyNode["sourceNodes"]} */
-exports.sourceNodes = () => {
-  if (activity) {
-    if (forceUpdateEnabled || strapiUpdateEnabled) {
-      activity.setStatus(`\`nova-datas-mocker\` has finished updating schema`)
-    } else {
-      activity.setStatus(`\`nova-datas-mocker\` hasn't updated schema`)
-    }
-    activity.end()
+/** @type {import('gatsby').GatsbyNode["createPages"]} */
+exports.createPages = ({ reporter }) => {
+  if (forceUpdateEnabled || strapiUpdateEnabled) {
+    reporter.info(
+      `\`gatsby-plugin-strapi-datas-mocker\` has finished updating schema`
+    )
   }
 }

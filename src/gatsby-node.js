@@ -15,7 +15,7 @@ const verifyConfig = (options, reporter, warnOnForceUpdate = false) => {
   }
   if (
     options.forceUpdate &&
-    options.forceUpdate === true &&
+    (options.forceUpdate === true || options.forceUpdate === `true`) &&
     warnOnForceUpdate
   ) {
     console.warn(
@@ -44,7 +44,10 @@ exports.onPluginInit = async ({ reporter }, options) => {
   reporter.info(`Loaded \`gatsby-plugin-strapi-datas-mocker\``)
 
   // Update on forcing update
-  if (options.forceUpdate) {
+  if (
+    options.forceUpdate &&
+    (options.forceUpdate === true || options.forceUpdate === `true`)
+  ) {
     return onPluginInit(
       { reporter },
       { ...options.gatsbyPluginSchemaSnapshotOptions, update: true }
@@ -101,17 +104,19 @@ exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
   }
 
   // read strapi plugin config
-
-  activity.start()
-  activity.setStatus(`\`nova-datas-mocker\` is reading Strapi config`)
+  if (activity) {
+    activity.start()
+    activity.setStatus(`\`nova-datas-mocker\` is reading Strapi config`)
+  }
   const apiFetchURL = `${options.strapiURL}/nova-datas-mocker/isMockEnabled`
 
   fetch(apiFetchURL)
     .then(result => result.json())
     .then(data => {
-      activity.setStatus(
-        `\`nova-datas-mocker\` get confing from Strapi, \`mockEnabled\`=${data.mockEnabled}`
-      )
+      if (activity)
+        activity.setStatus(
+          `\`nova-datas-mocker\` get confing from Strapi, \`mockEnabled\`=${data.mockEnabled}`
+        )
       return data.mockEnabled
     })
     .then(mockEnabled => {
@@ -121,7 +126,8 @@ exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
       )
     })
     .catch(error => {
-      activity.setStatus(`\`nova-datas-mocker\` has finished with error`)
+      if (activity)
+        activity.setStatus(`\`nova-datas-mocker\` has finished with error`)
       reporter.panicOnBuild(error)
       return null
     })
@@ -129,6 +135,8 @@ exports.createSchemaCustomization = async ({ actions, reporter }, options) => {
 
 /** @type {import('gatsby').GatsbyNode["sourceNodes"]} */
 exports.sourceNodes = () => {
-  activity.setStatus(`\`nova-datas-mocker\` has finished.`)
-  activity.end()
+  if (activity) {
+    activity.setStatus(`\`nova-datas-mocker\` has finished.`)
+    activity.end()
+  }
 }

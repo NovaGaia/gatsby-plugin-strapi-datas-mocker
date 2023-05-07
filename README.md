@@ -1,8 +1,12 @@
-# GATSBY-PLUGIN-NOVA-DATAS-MOCKER
+<div align="center">
+  <img style="width: 160px; height: auto;" src="./docs/logo-novagaia@3x.png" alt="Logo NovaGaïa" />
+  <h1>Nova Strapi APIs Mocker compagnion</h1>
+  <p>by <a href="https://novagaia.fr/" target="_blank">NovaGaïa</a>.</p>
+  <p><strong>A gatsby plugin to interact with Strapi and the plugin <a href="https://market.strapi.io/plugins/nova-datas-mocker" target="_blank">`nova-datas-mocker`</a>.</strong></p>
+<p><a href="https://github.com/NovaGaia/gatsby-plugin-strapi-datas-mocker/blob/main/CHANGELOG.md">CHANGELOG</a></p>
+</div>
 
-A gatsby plugin to interact with Strapi and the plugin [`nova-datas-mocker`](https://market.strapi.io/plugins/nova-datas-mocker).
-
-`gatsby-plugin-strapi-datas-mocker`is a complementary plugin to the Strapi`nova-datas-mocker`.
+`gatsby-plugin-strapi-datas-mocker` is a complementary plugin to the Strapi`nova-datas-mocker`.
 
 [`nova-datas-mocker`](https://market.strapi.io/plugins/nova-datas-mocker) takes care of mocking, on demand via a simple switch, all specified Strapi APIs and `gatsby-plugin-strapi-datas-mocker` drives the [`gatsby-plugin-schema-snapshot`](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-schema-snapshot#readme) plugin to generate/update the Gatsby schema.
 
@@ -11,7 +15,7 @@ With these two plugins, you will stop wasting time maintaining the shema or the 
 > **warn**:
 >
 > - Need `"nova-datas-mocker": "^1.3.10"` in Strapi.
-> - Need `"gatsby-plugin-schema-snapshot": "^3.24.0"` in Gatsby (is loaded with peerDepencies).
+> - Need `"gatsby-plugin-schema-snapshot": "^3.24.0"` in Gatsby (must be added by peerDepencies).
 
 ## Installation
 
@@ -48,9 +52,13 @@ plugins: [
 | property                            | function                                                                                                                                                        | default value                |
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `strapiURL`                         | Strapi URL, with port, without trailling slach                                                                                                                  | `required`, no default value |
-| `forceUpdate`                       | Force the plugin to update Shcema, without using the switch on Strapi (not recommanded)                                                                         | `false`                      |
+| `forceUpdate`                       | Force the plugin to update Schema, without using the switch on Strapi, _settings not recommanded_                                                               | `false`                      |
 | `gatsbyPluginSchemaSnapshotOptions` | The configuration of the plugin [`gatsby-plugin-schema-snapshot`](https://github.com/gatsbyjs/gatsby/tree/master/packages/gatsby-plugin-schema-snapshot#readme) | required, use `{}`           |
 
 ## WARN
 
 `forceUpdate` in Gatsby will not activate mocking in Strapi!
+
+---
+
+<a href="https://www.buymeacoffee.com/renaudheluin" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
